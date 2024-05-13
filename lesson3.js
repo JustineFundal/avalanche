@@ -22,10 +22,10 @@ async function main() {
         console.log("Balance:", balance.toString());
     });
 
-    await contract.addBalance(100); // Add balance to the account
-    await contract.displayBalance(); // Display the current balance
-    await contract.deductBalance(50); // Deduct balance from the account
-    await contract.displayBalance(); // Display the updated balance
+    await contract.addBalance(100); 
+    await contract.displayBalance(); 
+    await contract.deductBalance(50);
+    await contract.displayBalance();
 
     contract.removeAllListeners();
 }
