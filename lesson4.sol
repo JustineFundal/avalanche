@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract MessageContextExample {
+contract smartcontract {
     address public contractOwner;
     uint256 public contractBalance;
 
