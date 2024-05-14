@@ -1,18 +1,41 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.22;
 
-contract assesment {
-    uint public displayvalue;
+contract ErrorHandling {
+    address public owner;
+    uint public value;
 
-    function getValue(uint _setValue) external {
+    constructor() {
+        owner = msg.sender;
+        value = 0;
+    }
+
+
+    function setValue(uint _value) public {
+
+        require(msg.sender == owner, "Caller is not the owner");
         
-        require(_setValue != 3, "New value cannot be three");
-        assert(_setValue != 15); 
+        require(_value > 0, "Value must be greater than 0");
         
-        if (_setValue == 8) {
-            revert("New value cannot be 8");
+        value = _value;
+    }
+
+
+    function incrementValue(uint _increment) public {
+        value += _increment;
+        
+        assert(value >= _increment);
+    }
+
+    function resetValue() public {
+        if (msg.sender != owner) {
+            revert("Caller is not the owner");
         }
+        
+        value = 0;
+    }
 
-        displayvalue = _setValue;
+    function getValue() public view returns (uint) {
+        return value;
     }
 }
