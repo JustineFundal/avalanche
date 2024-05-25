@@ -1,50 +1,19 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.22;
+pragma solidity ^0.8.25;
 
-contract project {
-    address public owner;
-    uint public value;
+contract ThrottleTherapy{
 
-    constructor() {
-        owner = msg.sender;
-        value = 0;
+    function Gear2(uint RPM) public pure{
+        require(RPM <= 20, "Shift your gear!!!");
     }
 
-
-    function setValue(uint _value) public {
-
-        require(msg.sender == owner, "you are not the owner");
-        
-        require(_value > 100, "Value must be greater than 100");
-        
-        value = _value;
-    }
-
-
-    function incrementValue(uint _increment) public {
-        assert(value >= _increment);
-       
-        value += _increment;
-        
-        
-    }
-
-    function resetValue() public {
-        if (msg.sender != owner) {
-
-            revert("you are not the owner");
-
+    function Gear3(uint RPM) public pure{
+        if(RPM >= 60){
+            revert("Shift your gear!!!");
         }
-        else {
-            value = 0;
-        }
-        
-        
-        
-
     }
 
-    function getValue() public view returns (uint) {
-        return value;
+    function Gear4(uint RPM) public pure{
+        assert(RPM >= 100);
     }
 }
