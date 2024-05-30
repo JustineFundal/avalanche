@@ -1,26 +1,42 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.25;
 
-contract Justinetoken {
-    address public real;
-    constructor(address owner) {
-        real = owner;
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+contract Token is ERC20  {
+    uint256 private _minOwnerBurn; 
+    address public owner;
+    constructor(address _owner) ERC20("TOKEN", "TKN"){
+    owner = _owner;
+        _minOwnerBurn = 1000; 
     }
-    mapping(address => uint) public balance;
-    modifier realOwner() {
-        require(msg.sender == real, "only the real owner can use this function");
+
+    modifier onlyUnderMinOwnerBurn(address _address, uint256 amount) {
+        require(balanceOf(_address) - amount >= _minOwnerBurn, "Exceeds minimum owner burn");
         _;
     }
-    function Mint(address owner, uint Justtoken) public realOwner {
-        balance[owner] += Justtoken;
+
+    function mint(address to, uint256 amount) public {
+        require (owner == to, "you are not the owner");
+        _mint(to, amount);
+        
     }
-    function Burn(address owner, uint Justtoken) public {
-        require(balance[owner] >= Justtoken, " the balance is not enough");
-        balance[owner] -= Justtoken;
+
+    function burn(address _address,uint256 amount) public onlyUnderMinOwnerBurn(_address,amount) {
+        if (amount <= _minOwnerBurn){
+             _burn(_address, amount);
+        
+        }else {revert("you exceed to a minimum amount");}
     }
-    function Transfer(address realowner, address otherowner, uint Justtoken) public {
-        require(balance[realowner] >= Justtoken, "the balance is not enough");
-        balance[realowner] -= Justtoken;
-        balance[otherowner] += Justtoken;
+
+    function transfer(address to, uint256 amount) public override returns (bool) {
+        return super.transfer(to, amount);
+    }
+
+    function setMinOwnerBurn(uint256 minOwnerBurn) public {
+        _minOwnerBurn = minOwnerBurn; 
+    }
+
+    function getMaxOwnerBurn() public view returns (uint256) {
+        return _minOwnerBurn; 
     }
 }
